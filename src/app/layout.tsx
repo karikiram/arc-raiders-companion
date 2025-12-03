@@ -166,6 +166,11 @@ export default function RootLayout({
     <html lang="en" className="dark">
       <head>
         <JsonLd />
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5382553553174190"
+          crossOrigin="anonymous"
+        />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-zinc-950 text-white`}
