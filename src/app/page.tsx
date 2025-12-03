@@ -513,12 +513,9 @@ export default function Home() {
             </div>
           )}
 
-          {/* Help Tab - Coming Soon */}
+          {/* Help Tab */}
           {activeTab === 'help' && (
-            <ComingSoon
-              title="Help & FAQ"
-              description="Get help using Arc Raiders Companion and learn tips for your raids."
-            />
+            <HelpPanel />
           )}
         </main>
       </div>
@@ -566,6 +563,103 @@ function ComingSoon({ title, description }: ComingSoonProps) {
       <h2 className="text-xl font-bold text-white">{title}</h2>
       <p className="text-zinc-400 mt-2 max-w-md">{description}</p>
       <p className="text-accent mt-4 text-sm font-medium">Coming Soon</p>
+    </div>
+  );
+}
+
+function HelpPanel() {
+  return (
+    <div className="space-y-6">
+      <div>
+        <h2 className="text-2xl font-bold text-white">Help & FAQ</h2>
+        <p className="text-zinc-400 mt-1">Get help using Arc Raiders Companion</p>
+      </div>
+
+      <div className="grid gap-6 md:grid-cols-2">
+        {/* Getting Started */}
+        <div className="p-6 bg-zinc-900 border border-zinc-800 rounded-xl">
+          <h3 className="text-lg font-semibold text-white mb-4">Getting Started</h3>
+          <ul className="space-y-3 text-zinc-300">
+            <li className="flex gap-3">
+              <span className="text-accent font-bold">1.</span>
+              <span>Sign in with Google to sync your data across devices</span>
+            </li>
+            <li className="flex gap-3">
+              <span className="text-accent font-bold">2.</span>
+              <span>Add items to your stash from the Dashboard</span>
+            </li>
+            <li className="flex gap-3">
+              <span className="text-accent font-bold">3.</span>
+              <span>Track your Workshop upgrades to get smart recommendations</span>
+            </li>
+            <li className="flex gap-3">
+              <span className="text-accent font-bold">4.</span>
+              <span>Create loadouts to plan your raids</span>
+            </li>
+          </ul>
+        </div>
+
+        {/* FAQ */}
+        <div className="p-6 bg-zinc-900 border border-zinc-800 rounded-xl">
+          <h3 className="text-lg font-semibold text-white mb-4">Frequently Asked Questions</h3>
+          <div className="space-y-4">
+            <div>
+              <p className="text-white font-medium">Is my data saved?</p>
+              <p className="text-zinc-400 text-sm mt-1">
+                Yes! When signed in, your data syncs to the cloud automatically.
+              </p>
+            </div>
+            <div>
+              <p className="text-white font-medium">How do recommendations work?</p>
+              <p className="text-zinc-400 text-sm mt-1">
+                We analyze your workshop progress to tell you what items to keep, sell, or recycle.
+              </p>
+            </div>
+            <div>
+              <p className="text-white font-medium">Is this app official?</p>
+              <p className="text-zinc-400 text-sm mt-1">
+                No, this is a fan-made tool not affiliated with Embark Studios.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Contact & Feedback */}
+        <div className="p-6 bg-zinc-900 border border-zinc-800 rounded-xl">
+          <h3 className="text-lg font-semibold text-white mb-4">Contact & Feedback</h3>
+          <p className="text-zinc-400 mb-4">
+            Found a bug or have a suggestion? We&apos;d love to hear from you!
+          </p>
+          <a
+            href="mailto:support@arc-companion.com"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-accent hover:bg-accent/90 text-black font-medium rounded-lg transition-colors"
+          >
+            Send Feedback
+          </a>
+        </div>
+
+        {/* Legal */}
+        <div className="p-6 bg-zinc-900 border border-zinc-800 rounded-xl">
+          <h3 className="text-lg font-semibold text-white mb-4">Legal</h3>
+          <div className="space-y-3">
+            <a
+              href="/privacy"
+              className="block text-zinc-300 hover:text-accent transition-colors"
+            >
+              Privacy Policy
+            </a>
+            <a
+              href="/terms"
+              className="block text-zinc-300 hover:text-accent transition-colors"
+            >
+              Terms of Service
+            </a>
+          </div>
+          <p className="text-zinc-500 text-sm mt-4">
+            Arc Raiders Companion is not affiliated with Embark Studios.
+          </p>
+        </div>
+      </div>
     </div>
   );
 }
