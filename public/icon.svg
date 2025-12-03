@@ -1,0 +1,19 @@
+<svg width="512" height="512" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="gradient1" x1="6" y1="6" x2="58" y2="58" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FCD34D"/>
+      <stop offset="1" stop-color="#F59E0B"/>
+    </linearGradient>
+  </defs>
+  <!-- Background circle -->
+  <circle cx="32" cy="32" r="30" fill="#0a0a0a"/>
+  <!-- Outer circle with gap -->
+  <path d="M32 6A26 26 0 1 1 6 32" stroke="url(#gradient1)" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <!-- Letter A -->
+  <path d="M32 14L46 50H40L37 42H27L24 50H18L32 14Z" fill="url(#gradient1)"/>
+  <!-- A crossbar -->
+  <path d="M29 36H35" stroke="#0a0a0a" stroke-width="2"/>
+  <!-- Accent dots -->
+  <circle cx="10" cy="20" r="2" fill="#F59E0B" opacity="0.6"/>
+  <circle cx="6" cy="32" r="2" fill="#F59E0B"/>
+</svg>

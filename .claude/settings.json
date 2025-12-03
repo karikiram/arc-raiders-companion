@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "game-thinking": {
+      "command": "node",
+      "args": ["/Users/skrakt/Documents/GitHub/gamethinking-mcp-server/dist/index.js"]
+    },
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"]
+    }
+  }
+}

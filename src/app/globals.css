@@ -3,6 +3,10 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  /* Theme accent colors - default amber */
+  --color-accent: #f59e0b;
+  --color-accent-light: #fcd34d;
+  --color-accent-dark: #d97706;
 }
 
 @theme inline {
@@ -10,6 +14,10 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  /* Theme colors for Tailwind */
+  --color-accent: var(--color-accent);
+  --color-accent-light: var(--color-accent-light);
+  --color-accent-dark: var(--color-accent-dark);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -23,4 +31,122 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Animation utilities */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes expand {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 500px;
+  }
+}
+
+.animate-in {
+  animation-fill-mode: both;
+}
+
+.fade-in-0 {
+  animation: fade-in 0.2s ease-out;
+}
+
+.slide-down {
+  animation: slide-down 0.2s ease-out;
+}
+
+.animate-expand {
+  animation: expand 0.2s ease-out;
+  overflow: hidden;
+}
+
+/* Theme accent utilities */
+.text-accent {
+  color: var(--color-accent);
+}
+
+.text-accent-light {
+  color: var(--color-accent-light);
+}
+
+.text-accent-dark {
+  color: var(--color-accent-dark);
+}
+
+.bg-accent {
+  background-color: var(--color-accent);
+}
+
+.bg-accent-light {
+  background-color: var(--color-accent-light);
+}
+
+.bg-accent-dark {
+  background-color: var(--color-accent-dark);
+}
+
+.border-accent {
+  border-color: var(--color-accent);
+}
+
+.border-accent\/30 {
+  border-color: color-mix(in srgb, var(--color-accent) 30%, transparent);
+}
+
+.bg-accent\/10 {
+  background-color: color-mix(in srgb, var(--color-accent) 10%, transparent);
+}
+
+.bg-accent\/20 {
+  background-color: color-mix(in srgb, var(--color-accent) 20%, transparent);
+}
+
+.from-accent\/10 {
+  --tw-gradient-from: color-mix(in srgb, var(--color-accent) 10%, transparent);
+}
+
+.from-accent\/20 {
+  --tw-gradient-from: color-mix(in srgb, var(--color-accent) 20%, transparent);
+}
+
+.to-accent-dark\/10 {
+  --tw-gradient-to: color-mix(in srgb, var(--color-accent-dark) 10%, transparent);
+}
+
+.to-accent-dark\/20 {
+  --tw-gradient-to: color-mix(in srgb, var(--color-accent-dark) 20%, transparent);
+}
+
+.ring-accent {
+  --tw-ring-color: var(--color-accent);
+}
+
+.hover\:bg-accent-light:hover {
+  background-color: var(--color-accent-light);
+}
+
+.hover\:text-accent:hover {
+  color: var(--color-accent);
 }
