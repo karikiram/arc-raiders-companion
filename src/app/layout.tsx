@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/react";
 import { AuthProvider, ProgressProvider, SubscriptionProvider } from "@/context";
 import { JsonLd } from "@/components/seo/JsonLd";
 import "./globals.css";
@@ -182,6 +183,7 @@ export default function RootLayout({
             </ProgressProvider>
           </SubscriptionProvider>
         </AuthProvider>
+        <Analytics />
       </body>
     </html>
   );
