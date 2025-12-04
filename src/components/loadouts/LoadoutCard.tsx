@@ -204,7 +204,7 @@ export function LoadoutCard({
                   key={slotId}
                   onClick={() => onSlotClick?.(loadout, slotId)}
                   className={cn(
-                    'p-3 rounded-lg border transition-all text-left group',
+                    'p-3 rounded-lg border transition-all text-left group cursor-pointer',
                     item
                       ? 'bg-zinc-800/50 border-zinc-700 hover:border-zinc-600'
                       : 'bg-zinc-800/30 border-zinc-800 border-dashed hover:border-zinc-600'

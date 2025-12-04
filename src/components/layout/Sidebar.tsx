@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useState } from 'react';
 import {
   LayoutDashboard,
   Package,
@@ -11,26 +11,23 @@ import {
   HelpCircle,
   Hammer,
   Recycle,
-  ChevronsLeft,
-  ChevronsRight,
   X,
+  Database,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Logo } from '@/components/ui';
-import { SidebarAd } from '@/components/subscription';
 
 interface SidebarProps {
   activeTab?: string;
   onTabChange?: (tab: string) => void;
   isOpen?: boolean;
   onClose?: () => void;
-  onCollapsedChange?: (collapsed: boolean) => void;
+  onHoverChange?: (isHovered: boolean) => void;
 }
-
-const SIDEBAR_COLLAPSED_KEY = 'sidebar-collapsed';
 
 const navItems = [
   { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { id: 'items', label: 'Items Database', icon: Database },
   { id: 'stash', label: 'Raider Stash', icon: Package },
   { id: 'hoarding', label: 'Workshop Upgrades', icon: Hammer },
   { id: 'recyclables', label: 'Recycle & Sell', icon: Recycle },
@@ -44,28 +41,18 @@ const bottomItems = [
   { id: 'help', label: 'Help', icon: HelpCircle },
 ];
 
-export function Sidebar({ activeTab = 'dashboard', onTabChange, isOpen = false, onClose, onCollapsedChange }: SidebarProps) {
-  const [isCollapsed, setIsCollapsed] = useState(false);
-  const [mounted, setMounted] = useState(false);
+export function Sidebar({ activeTab = 'dashboard', onTabChange, isOpen = false, onClose, onHoverChange }: SidebarProps) {
+  const [isHovered, setIsHovered] = useState(false);
 
-  // Load collapsed state from localStorage on mount
-  useEffect(() => {
-    const stored = localStorage.getItem(SIDEBAR_COLLAPSED_KEY);
-    if (stored !== null) {
-      const collapsed = stored === 'true';
-      setIsCollapsed(collapsed);
-      onCollapsedChange?.(collapsed);
-    }
-    setMounted(true);
-  }, [onCollapsedChange]);
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+    onHoverChange?.(true);
+  };
 
-  // Toggle collapsed state
-  const toggleCollapsed = useCallback(() => {
-    const newState = !isCollapsed;
-    setIsCollapsed(newState);
-    localStorage.setItem(SIDEBAR_COLLAPSED_KEY, String(newState));
-    onCollapsedChange?.(newState);
-  }, [isCollapsed, onCollapsedChange]);
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+    onHoverChange?.(false);
+  };
 
   const handleTabClick = (tabId: string) => {
     onTabChange?.(tabId);
@@ -75,8 +62,8 @@ export function Sidebar({ activeTab = 'dashboard', onTabChange, isOpen = false, 
     }
   };
 
-  // Prevent hydration mismatch - render expanded by default on server
-  const collapsed = mounted ? isCollapsed : false;
+  // Sidebar is expanded when hovered on desktop
+  const isExpanded = isHovered;
 
   return (
     <>
@@ -89,14 +76,16 @@ export function Sidebar({ activeTab = 'dashboard', onTabChange, isOpen = false, 
         onClick={onClose}
       />
 
-      {/* Sidebar */}
+      {/* Sidebar - collapses on desktop, expands on hover */}
       <aside
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
         className={cn(
-          'fixed top-16 left-0 z-40 flex flex-col bg-zinc-900 border-r border-zinc-800 h-[calc(100vh-4rem)] transition-all duration-300 ease-in-out',
-          // Desktop: show based on collapsed state
+          'fixed top-16 left-0 z-40 flex flex-col bg-zinc-900 border-r border-zinc-800 h-[calc(100vh-4rem)] transition-all duration-200 ease-in-out',
+          // Desktop: collapsed by default, expanded on hover
           'lg:translate-x-0',
-          collapsed ? 'lg:w-14' : 'lg:w-56',
-          // Mobile: slide in/out
+          isExpanded ? 'lg:w-56' : 'lg:w-14',
+          // Mobile: slide in/out (full width)
           isOpen ? 'translate-x-0 w-72' : '-translate-x-full w-72 lg:translate-x-0'
         )}
       >
@@ -108,31 +97,23 @@ export function Sidebar({ activeTab = 'dashboard', onTabChange, isOpen = false, 
           <X className="w-5 h-5" />
         </button>
 
-        {/* Header with Logo and Collapse Toggle */}
+        {/* Header with Logo */}
         <div className={cn(
           'hidden lg:flex items-center p-2 border-b border-zinc-800',
-          collapsed ? 'justify-center' : 'justify-between'
+          isExpanded ? 'justify-start' : 'justify-center'
         )}>
-          {collapsed ? (
-            <button
-              onClick={toggleCollapsed}
-              className="p-2 text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-lg transition-colors"
-              title="Expand sidebar"
-            >
-              <ChevronsRight className="w-5 h-5" />
-            </button>
-          ) : (
-            <>
-              <Logo size="sm" showText={false} className="px-1" />
-              <button
-                onClick={toggleCollapsed}
-                className="p-2 text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-lg transition-colors"
-                title="Collapse sidebar"
-              >
-                <ChevronsLeft className="w-5 h-5" />
-              </button>
-            </>
+          <Logo size="sm" showText={false} className="px-1" />
+          {isExpanded && (
+            <div className="ml-2 overflow-hidden">
+              <p className="text-sm font-semibold text-white whitespace-nowrap">ARC</p>
+              <p className="text-[10px] text-zinc-500 uppercase tracking-wider whitespace-nowrap">Companion</p>
+            </div>
           )}
+        </div>
+
+        {/* Mobile Header */}
+        <div className="lg:hidden flex items-center p-4 border-b border-zinc-800">
+          <Logo size="sm" showText={true} />
         </div>
 
         <nav className="flex-1 p-2 overflow-y-auto overflow-x-hidden">
@@ -145,21 +126,22 @@ export function Sidebar({ activeTab = 'dashboard', onTabChange, isOpen = false, 
                 <button
                   key={item.id}
                   onClick={() => handleTabClick(item.id)}
-                  title={collapsed ? item.label : undefined}
+                  title={!isExpanded ? item.label : undefined}
                   className={cn(
                     'w-full flex items-center gap-3 rounded-lg text-sm font-medium transition-colors',
                     isActive
                       ? 'bg-accent/10 text-accent'
                       : 'text-zinc-400 hover:text-white hover:bg-zinc-800',
-                    collapsed ? 'justify-center p-2.5' : 'px-3 py-2.5'
+                    isExpanded ? 'px-3 py-2.5' : 'lg:justify-center p-2.5'
                   )}
                 >
                   <Icon className="w-5 h-5 flex-shrink-0" />
-                  {!collapsed && (
-                    <span className="whitespace-nowrap">
-                      {item.label}
-                    </span>
-                  )}
+                  <span className={cn(
+                    'whitespace-nowrap',
+                    isExpanded ? 'block' : 'lg:hidden'
+                  )}>
+                    {item.label}
+                  </span>
                 </button>
               );
             })}
@@ -176,29 +158,26 @@ export function Sidebar({ activeTab = 'dashboard', onTabChange, isOpen = false, 
                 <button
                   key={item.id}
                   onClick={() => handleTabClick(item.id)}
-                  title={collapsed ? item.label : undefined}
+                  title={!isExpanded ? item.label : undefined}
                   className={cn(
                     'w-full flex items-center gap-3 rounded-lg text-sm font-medium transition-colors',
                     isActive
                       ? 'bg-accent/10 text-accent'
                       : 'text-zinc-400 hover:text-white hover:bg-zinc-800',
-                    collapsed ? 'justify-center p-2.5' : 'px-3 py-2.5'
+                    isExpanded ? 'px-3 py-2.5' : 'lg:justify-center p-2.5'
                   )}
                 >
                   <Icon className="w-5 h-5 flex-shrink-0" />
-                  {!collapsed && (
-                    <span className="whitespace-nowrap">
-                      {item.label}
-                    </span>
-                  )}
+                  <span className={cn(
+                    'whitespace-nowrap',
+                    isExpanded ? 'block' : 'lg:hidden'
+                  )}>
+                    {item.label}
+                  </span>
                 </button>
               );
             })}
           </div>
-
-  
-          {/* Ad slot for free users - only in expanded sidebar */}
-          {!collapsed && <SidebarAd />}
         </div>
       </aside>
     </>

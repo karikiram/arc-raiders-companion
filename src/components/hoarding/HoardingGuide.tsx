@@ -223,7 +223,7 @@ export function HoardingGuide({ stash, onSignIn }: HoardingGuideProps) {
         </div>
         <button
           onClick={() => setShowCompletedLevels(!showCompletedLevels)}
-          className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors border bg-amber-500/10 text-amber-400 border-amber-500/30 hover:bg-amber-500/20"
+          className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors border bg-amber-500/10 text-amber-400 border-amber-500/30 hover:bg-amber-500/20 cursor-pointer"
         >
           {showCompletedLevels ? (
             <>
@@ -356,7 +356,7 @@ export function HoardingGuide({ stash, onSignIn }: HoardingGuideProps) {
                 key={tab.id}
                 onClick={() => setActiveView(tab.id)}
                 className={cn(
-                  'flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap',
+                  'flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap cursor-pointer',
                   isActive
                     ? 'bg-amber-500/10 text-amber-400'
                     : 'text-zinc-400 hover:text-white hover:bg-zinc-800'
@@ -419,7 +419,7 @@ export function HoardingGuide({ stash, onSignIn }: HoardingGuideProps) {
               <Card key={categoryId}>
                 <button
                   onClick={() => toggleCategory(categoryId)}
-                  className="w-full"
+                  className="w-full cursor-pointer"
                 >
                   <CardHeader className="pb-2">
                     <div className="flex items-center justify-between">
@@ -595,7 +595,7 @@ export function HoardingGuide({ stash, onSignIn }: HoardingGuideProps) {
                         {/* Level Header - Collapsible */}
                         <div className="flex items-center justify-between p-3">
                           <div
-                            className="flex items-center gap-2 cursor-pointer flex-1"
+                            className="flex items-center gap-2 cursor-pointer flex-1 hover:bg-zinc-800/50 rounded-lg -mx-2 px-2 py-1"
                             onClick={() => toggleLevel(levelKey)}
                           >
                             {isExpanded ? (
@@ -619,7 +619,7 @@ export function HoardingGuide({ stash, onSignIn }: HoardingGuideProps) {
                               level.level === currentLevel && (
                                 <button
                                   onClick={() => unmarkWorkshopLevelComplete(activeStation.id, level.level)}
-                                  className="px-3 py-1 rounded text-xs font-medium transition-colors bg-zinc-700 text-zinc-300 hover:bg-zinc-600 flex items-center gap-1.5"
+                                  className="px-3 py-1 rounded text-xs font-medium transition-colors bg-zinc-700 text-zinc-300 hover:bg-zinc-600 flex items-center gap-1.5 cursor-pointer"
                                   title="Undo - mark as incomplete"
                                 >
                                   <Undo2 className="w-3 h-3" />
@@ -637,7 +637,7 @@ export function HoardingGuide({ stash, onSignIn }: HoardingGuideProps) {
                                 className={cn(
                                   'px-3 py-1 rounded text-xs font-medium transition-colors',
                                   canComplete
-                                    ? 'bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30'
+                                    ? 'bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 cursor-pointer'
                                     : 'bg-zinc-800 text-zinc-500 cursor-not-allowed'
                                 )}
                                 title={!canComplete ? 'Complete previous levels first' : 'Mark as completed in-game'}
@@ -773,7 +773,7 @@ export function HoardingGuide({ stash, onSignIn }: HoardingGuideProps) {
                                 onClick={() => {
                                   unmarkScrappyLevelComplete(level.level);
                                 }}
-                                className="px-3 py-1 rounded text-xs font-medium transition-colors bg-zinc-700 text-zinc-300 hover:bg-zinc-600 flex items-center gap-1.5"
+                                className="px-3 py-1 rounded text-xs font-medium transition-colors bg-zinc-700 text-zinc-300 hover:bg-zinc-600 flex items-center gap-1.5 cursor-pointer"
                                 title="Undo - mark as incomplete"
                               >
                                 <Undo2 className="w-3 h-3" />
@@ -791,7 +791,7 @@ export function HoardingGuide({ stash, onSignIn }: HoardingGuideProps) {
                               className={cn(
                                 'px-3 py-1 rounded text-xs font-medium transition-colors',
                                 canComplete
-                                  ? 'bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30'
+                                  ? 'bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 cursor-pointer'
                                   : 'bg-zinc-800 text-zinc-500 cursor-not-allowed'
                               )}
                               title={!canComplete ? 'Complete previous levels first' : 'Mark as completed in-game'}

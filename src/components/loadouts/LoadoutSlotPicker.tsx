@@ -171,7 +171,7 @@ export function LoadoutSlotPicker({
           </div>
           <button
             onClick={onClose}
-            className="p-2 text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-lg transition-colors"
+            className="p-2 text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-lg transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -196,7 +196,7 @@ export function LoadoutSlotPicker({
           <div className="relative" ref={dropdownRef}>
             <button
               onClick={() => setShowRarityDropdown(!showRarityDropdown)}
-              className="flex items-center gap-2 px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white hover:border-zinc-600 transition-colors min-w-[140px]"
+              className="flex items-center gap-2 px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white hover:border-zinc-600 transition-colors min-w-[140px] cursor-pointer"
             >
               <span className="flex-1 text-left capitalize">
                 {selectedRarity === 'all' ? 'All Rarities' : selectedRarity}
@@ -211,7 +211,7 @@ export function LoadoutSlotPicker({
                     setShowRarityDropdown(false);
                   }}
                   className={cn(
-                    'w-full px-4 py-2 text-left text-sm hover:bg-zinc-700 transition-colors',
+                    'w-full px-4 py-2 text-left text-sm hover:bg-zinc-700 transition-colors cursor-pointer',
                     selectedRarity === 'all' ? 'text-amber-400' : 'text-white'
                   )}
                 >
@@ -225,7 +225,7 @@ export function LoadoutSlotPicker({
                       setShowRarityDropdown(false);
                     }}
                     className={cn(
-                      'w-full px-4 py-2 text-left text-sm hover:bg-zinc-700 transition-colors capitalize',
+                      'w-full px-4 py-2 text-left text-sm hover:bg-zinc-700 transition-colors capitalize cursor-pointer',
                       selectedRarity === rarity ? 'text-amber-400' : 'text-white'
                     )}
                   >
@@ -243,7 +243,7 @@ export function LoadoutSlotPicker({
                 onSelectItem(null);
                 onClose();
               }}
-              className="flex items-center gap-2 px-4 py-2 text-red-400 hover:bg-red-500/10 border border-red-500/30 rounded-lg transition-colors"
+              className="flex items-center gap-2 px-4 py-2 text-red-400 hover:bg-red-500/10 border border-red-500/30 rounded-lg transition-colors cursor-pointer"
             >
               <Trash2 className="w-4 h-4" />
               Clear Slot
@@ -277,7 +277,7 @@ export function LoadoutSlotPicker({
                       onClose();
                     }}
                     className={cn(
-                      'relative p-2 rounded-lg border transition-all text-left group',
+                      'relative p-2 rounded-lg border transition-all text-left group cursor-pointer',
                       isSelected
                         ? 'bg-amber-500/10 border-amber-500/50 ring-1 ring-amber-500/30'
                         : 'bg-zinc-800/50 border-zinc-700 hover:border-zinc-600 hover:bg-zinc-800'

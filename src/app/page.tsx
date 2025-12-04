@@ -1,75 +1,72 @@
 'use client';
 
 import { useState, useCallback, useEffect } from 'react';
-import {
-  Package,
-  TrendingUp,
-  Target,
-  Building2,
-  Hammer,
-  Recycle,
-  Shirt,
-} from 'lucide-react';
+import { Package } from 'lucide-react';
 import { Header } from '@/components/layout/Header';
 import { Sidebar } from '@/components/layout/Sidebar';
 import { StashAnalyzer, ItemPicker } from '@/components/stash';
 import { LoadoutManager } from '@/components/loadouts';
 import { HoardingGuide } from '@/components/hoarding';
 import { RecyclablesGuide } from '@/components/recyclables';
+import { ItemsDatabase } from '@/components/items-database';
+import { Dashboard } from '@/components/dashboard';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui';
-import { useAuth, useSubscription, useProgress } from '@/context';
+import { useAuth } from '@/context';
 import { DashboardAd } from '@/components/subscription';
 import { ThemeSelector } from '@/components/settings';
 import { DEFAULT_LOADOUTS } from '@/data';
 import type { StashItem, Loadout } from '@/types';
 
-// Demo data for non-authenticated users
-const DEMO_STASH: StashItem[] = [
+// Demo stash item IDs and quantities (dates added on client side to avoid hydration mismatch)
+const DEMO_STASH_DATA = [
   // Basic Materials
-  { itemId: 'chemicals', quantity: 87, addedAt: new Date() },
-  { itemId: 'fabric', quantity: 45, addedAt: new Date() },
-  { itemId: 'plastic_parts', quantity: 23, addedAt: new Date() },
-  { itemId: 'metal_parts', quantity: 32, addedAt: new Date() },
-  { itemId: 'rubber_parts', quantity: 18, addedAt: new Date() },
+  { itemId: 'chemicals', quantity: 87 },
+  { itemId: 'fabric', quantity: 45 },
+  { itemId: 'plastic_parts', quantity: 23 },
+  { itemId: 'metal_parts', quantity: 32 },
+  { itemId: 'rubber_parts', quantity: 18 },
   // Topside Materials
-  { itemId: 'arc_alloy', quantity: 8, addedAt: new Date() },
-  { itemId: 'arc_circuitry', quantity: 12, addedAt: new Date() },
-  { itemId: 'arc_powercell', quantity: 15, addedAt: new Date() },
+  { itemId: 'arc_alloy', quantity: 8 },
+  { itemId: 'arc_circuitry', quantity: 12 },
+  { itemId: 'arc_powercell', quantity: 15 },
   // Advanced Materials
-  { itemId: 'advanced_arc_powercell', quantity: 4, addedAt: new Date() },
-  { itemId: 'complex_gun_parts', quantity: 2, addedAt: new Date() },
+  { itemId: 'advanced_arc_powercell', quantity: 4 },
+  { itemId: 'complex_gun_parts', quantity: 2 },
   // Weapons
-  { itemId: 'burletta_i', quantity: 2, addedAt: new Date() },
-  { itemId: 'ferro_i', quantity: 1, addedAt: new Date() },
-  { itemId: 'rattler_i', quantity: 1, addedAt: new Date() },
+  { itemId: 'burletta_i', quantity: 2 },
+  { itemId: 'ferro_i', quantity: 1 },
+  { itemId: 'rattler_i', quantity: 1 },
   // Quick Use
-  { itemId: 'defibrillator', quantity: 3, addedAt: new Date() },
-  { itemId: 'bandage', quantity: 8, addedAt: new Date() },
-  { itemId: 'adrenaline_shot', quantity: 2, addedAt: new Date() },
+  { itemId: 'defibrillator', quantity: 3 },
+  { itemId: 'bandage', quantity: 8 },
+  { itemId: 'adrenaline_shot', quantity: 2 },
   // Trinkets
-  { itemId: 'fine_wristwatch', quantity: 2, addedAt: new Date() },
-  { itemId: 'film_reel', quantity: 3, addedAt: new Date() },
+  { itemId: 'fine_wristwatch', quantity: 2 },
+  { itemId: 'film_reel', quantity: 3 },
   // Keys
-  { itemId: 'blue_gate_cellar_key', quantity: 1, addedAt: new Date() },
-  { itemId: 'dam_staff_room_key', quantity: 1, addedAt: new Date() },
+  { itemId: 'blue_gate_cellar_key', quantity: 1 },
+  { itemId: 'dam_staff_room_key', quantity: 1 },
   // Ammo
-  { itemId: 'light_ammo', quantity: 90, addedAt: new Date() },
-  { itemId: 'medium_ammo', quantity: 45, addedAt: new Date() },
-  { itemId: 'shotgun_ammo', quantity: 20, addedAt: new Date() },
+  { itemId: 'light_ammo', quantity: 90 },
+  { itemId: 'medium_ammo', quantity: 45 },
+  { itemId: 'shotgun_ammo', quantity: 20 },
   // Recyclables
-  { itemId: 'alarm_clock', quantity: 5, addedAt: new Date() },
-  { itemId: 'duct_tape', quantity: 8, addedAt: new Date() },
+  { itemId: 'alarm_clock', quantity: 5 },
+  { itemId: 'duct_tape', quantity: 8 },
 ];
+
+// Helper to create demo stash with dates (called on client side only)
+const createDemoStash = (): StashItem[] =>
+  DEMO_STASH_DATA.map(item => ({ ...item, addedAt: new Date() }));
 
 const DEMO_ACTIVE_QUESTS: string[] = [];
 const DEMO_COMPLETED_QUESTS: string[] = [];
 
 export default function Home() {
   const { user, userProfile, loading, signInWithGoogle, signOut, updateUserProfile, isNewAccount } = useAuth();
-  const { progress } = useProgress();
   const [activeTab, setActiveTab] = useState('dashboard');
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [sidebarHovered, setSidebarHovered] = useState(false);
   const [showItemPicker, setShowItemPicker] = useState(false);
 
   // Local state for demo mode (when not signed in)
@@ -93,11 +90,11 @@ export default function Home() {
         setLocalStash(stash);
       } catch {
         // If parsing fails, use demo stash
-        setLocalStash([...DEMO_STASH]);
+        setLocalStash(createDemoStash());
       }
     } else {
       // First time - use demo stash
-      setLocalStash([...DEMO_STASH]);
+      setLocalStash(createDemoStash());
     }
     setStashInitialized(true);
   }, []);
@@ -267,155 +264,20 @@ export default function Home() {
           onTabChange={setActiveTab}
           isOpen={mobileSidebarOpen}
           onClose={() => setMobileSidebarOpen(false)}
-          onCollapsedChange={setSidebarCollapsed}
+          onHoverChange={setSidebarHovered}
         />
 
         {/* Main content with left margin to account for fixed sidebar */}
-        <main className={`flex-1 p-6 lg:p-8 transition-all duration-300 ${sidebarCollapsed ? 'lg:ml-14' : 'lg:ml-56'}`}>
+        <main className={`flex-1 p-6 lg:p-8 transition-all duration-200 ${sidebarHovered ? 'lg:ml-56' : 'lg:ml-14'}`}>
           {/* Dashboard Tab */}
           {activeTab === 'dashboard' && (
-            <div className="space-y-6">
-              <div>
-                <h1 className="text-2xl font-bold text-white">Dashboard</h1>
-                <p className="text-zinc-400 mt-1">
-                  Your Arc Raiders companion at a glance
-                </p>
-              </div>
-
-              {/* Quick Stats */}
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                <StatCard
-                  icon={Package}
-                  label="Items in Stash"
-                  value={stash.length}
-                  color="accent"
-                />
-                <StatCard
-                  icon={Target}
-                  label="Active Quests"
-                  value={activeQuests.length}
-                  color="accent"
-                />
-                <StatCard
-                  icon={Hammer}
-                  label="Workshop Upgrades"
-                  value={Object.values(progress.workshopLevels).reduce((a, b) => a + b, 0) + (progress.scrappyLevel - 1)}
-                  color="emerald"
-                />
-                <StatCard
-                  icon={TrendingUp}
-                  label="Loadouts"
-                  value={loadouts.length}
-                  color="violet"
-                />
-              </div>
-
-              {/* Quick Actions */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>Quick Actions</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
-                    <button
-                      onClick={() => setActiveTab('stash')}
-                      className="p-4 bg-zinc-800 rounded-lg hover:bg-zinc-700 transition-colors text-left"
-                    >
-                      <Package className="w-6 h-6 text-accent mb-2" />
-                      <p className="font-medium text-white">Raider Stash</p>
-                      <p className="text-xs text-zinc-500 mt-1">
-                        Get KEEP/SELL/RECYCLE advice
-                      </p>
-                    </button>
-                    <button
-                      onClick={() => setActiveTab('hoarding')}
-                      className="p-4 bg-zinc-800 rounded-lg hover:bg-zinc-700 transition-colors text-left"
-                    >
-                      <Hammer className="w-6 h-6 text-red-400 mb-2" />
-                      <p className="font-medium text-white">Workshop Upgrades</p>
-                      <p className="text-xs text-zinc-500 mt-1">
-                        Items to save for upgrades
-                      </p>
-                    </button>
-                    <button
-                      onClick={() => setActiveTab('recyclables')}
-                      className="p-4 bg-zinc-800 rounded-lg hover:bg-zinc-700 transition-colors text-left"
-                    >
-                      <Recycle className="w-6 h-6 text-emerald-400 mb-2" />
-                      <p className="font-medium text-white">Recycle & Sell</p>
-                      <p className="text-xs text-zinc-500 mt-1">
-                        What to recycle vs sell
-                      </p>
-                    </button>
-                    <button
-                      onClick={() => setActiveTab('loadouts')}
-                      className="p-4 bg-zinc-800 rounded-lg hover:bg-zinc-700 transition-colors text-left"
-                    >
-                      <Shirt className="w-6 h-6 text-emerald-400 mb-2" />
-                      <p className="font-medium text-white">Manage Loadouts</p>
-                      <p className="text-xs text-zinc-500 mt-1">
-                        Create gear presets
-                      </p>
-                    </button>
-                    <button
-                      onClick={() => setActiveTab('quests')}
-                      className="p-4 bg-zinc-800 rounded-lg hover:bg-zinc-700 transition-colors text-left"
-                    >
-                      <TrendingUp className="w-6 h-6 text-blue-400 mb-2" />
-                      <p className="font-medium text-white">Quest Tracker</p>
-                      <p className="text-xs text-zinc-500 mt-1">
-                        Track requirements
-                      </p>
-                    </button>
-                    <button
-                      onClick={() => setActiveTab('hideout')}
-                      className="p-4 bg-zinc-800 rounded-lg hover:bg-zinc-700 transition-colors text-left"
-                    >
-                      <Building2 className="w-6 h-6 text-violet-400 mb-2" />
-                      <p className="font-medium text-white">Hideout Planner</p>
-                      <p className="text-xs text-zinc-500 mt-1">
-                        Plan upgrades
-                      </p>
-                    </button>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Recent Activity / Tips */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>Pro Tips</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ul className="space-y-3 text-sm text-zinc-400">
-                    <li className="flex items-start gap-2">
-                      <span className="text-accent">💡</span>
-                      <span>
-                        Common materials like Scrap Metal and Plastic can be sold
-                        once you have 100+. You&apos;ll always find more.
-                      </span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-accent">💡</span>
-                      <span>
-                        Keycards are always worth keeping - they grant access to
-                        high-value loot areas.
-                      </span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-accent">💡</span>
-                      <span>
-                        Recycling common weapons often yields more value than
-                        selling them directly.
-                      </span>
-                    </li>
-                  </ul>
-                </CardContent>
-              </Card>
-
+            <>
+              <Dashboard onNavigate={setActiveTab} />
               {/* Dashboard Ad for free users */}
-              <DashboardAd />
-            </div>
+              <div className="mt-8">
+                <DashboardAd />
+              </div>
+            </>
           )}
 
           {/* Stash Tab */}
@@ -425,7 +287,7 @@ export default function Home() {
                 existingItems={stash}
                 onAddItems={handleAddItems}
                 onClose={() => setShowItemPicker(false)}
-                sidebarCollapsed={sidebarCollapsed}
+                sidebarExpanded={sidebarHovered}
               />
             ) : (
               <div className="space-y-6">
@@ -458,6 +320,11 @@ export default function Home() {
                 />
               </div>
             )
+          )}
+
+          {/* Items Database Tab */}
+          {activeTab === 'items' && (
+            <ItemsDatabase />
           )}
 
           {/* Hoarding Guide Tab */}
@@ -519,32 +386,6 @@ export default function Home() {
           )}
         </main>
       </div>
-    </div>
-  );
-}
-
-interface StatCardProps {
-  icon: typeof Package;
-  label: string;
-  value: number;
-  color: 'blue' | 'accent' | 'emerald' | 'violet';
-}
-
-function StatCard({ icon: Icon, label, value, color }: StatCardProps) {
-  const colorClasses = {
-    blue: 'bg-blue-500/10 text-blue-400',
-    accent: 'bg-accent/10 text-accent',
-    emerald: 'bg-emerald-500/10 text-emerald-400',
-    violet: 'bg-violet-500/10 text-violet-400',
-  };
-
-  return (
-    <div className="p-4 bg-zinc-900 border border-zinc-800 rounded-xl">
-      <div className={`w-10 h-10 rounded-lg ${colorClasses[color]} flex items-center justify-center mb-3`}>
-        <Icon className="w-5 h-5" />
-      </div>
-      <p className="text-2xl font-bold text-white">{value}</p>
-      <p className="text-sm text-zinc-500">{label}</p>
     </div>
   );
 }

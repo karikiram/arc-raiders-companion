@@ -205,7 +205,7 @@ export function StashAnalyzer({
         {stash.length > 0 && (
           <button
             onClick={() => setShowClearConfirm(true)}
-            className="flex items-center gap-2 px-3 py-2 text-red-400 hover:text-red-300 hover:bg-red-500/10 border border-red-500/30 rounded-lg transition-colors"
+            className="flex items-center gap-2 px-3 py-2 text-red-400 hover:text-red-300 hover:bg-red-500/10 border border-red-500/30 rounded-lg transition-colors cursor-pointer"
           >
             <Trash2 className="w-4 h-4" />
             <span className="text-sm font-medium">Clear Stash</span>
@@ -237,7 +237,7 @@ export function StashAnalyzer({
             <div className="flex gap-3">
               <button
                 onClick={() => setShowClearConfirm(false)}
-                className="flex-1 px-4 py-2.5 bg-zinc-700 hover:bg-zinc-600 text-white font-medium rounded-lg transition-colors"
+                className="flex-1 px-4 py-2.5 bg-zinc-700 hover:bg-zinc-600 text-white font-medium rounded-lg transition-colors cursor-pointer"
               >
                 Cancel
               </button>
@@ -246,7 +246,7 @@ export function StashAnalyzer({
                   onClearStash();
                   setShowClearConfirm(false);
                 }}
-                className="flex-1 px-4 py-2.5 bg-red-500 hover:bg-red-600 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
+                className="flex-1 px-4 py-2.5 bg-red-500 hover:bg-red-600 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2 cursor-pointer"
               >
                 <Trash2 className="w-4 h-4" />
                 Clear Stash
@@ -320,7 +320,7 @@ function SummaryCard({
     <button
       onClick={onClick}
       className={cn(
-        'p-4 rounded-xl border transition-all text-left',
+        'p-4 rounded-xl border transition-all text-left cursor-pointer',
         active
           ? colorClasses[color]
           : 'bg-zinc-900 border-zinc-800 hover:border-zinc-700'
@@ -439,7 +439,7 @@ function StashItemRow({ analysis, onRemoveItem }: StashItemRowProps) {
         {/* Remove Button */}
         <button
           onClick={handleQuickRemove}
-          className="p-2 text-zinc-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors flex-shrink-0"
+          className="p-2 text-zinc-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors flex-shrink-0 cursor-pointer"
           title="Remove from stash"
         >
           <Trash2 className="w-4 h-4" />
@@ -453,7 +453,7 @@ function StashItemRow({ analysis, onRemoveItem }: StashItemRowProps) {
           <div className="flex items-center gap-1">
             <button
               onClick={() => setRemoveQuantity(Math.max(1, removeQuantity - 1))}
-              className="w-8 h-8 rounded bg-zinc-700 text-white hover:bg-zinc-600 flex items-center justify-center"
+              className="w-8 h-8 rounded bg-zinc-700 text-white hover:bg-zinc-600 flex items-center justify-center cursor-pointer"
             >
               <Minus className="w-4 h-4" />
             </button>
@@ -467,27 +467,27 @@ function StashItemRow({ analysis, onRemoveItem }: StashItemRowProps) {
             />
             <button
               onClick={() => setRemoveQuantity(Math.min(analysis.quantity, removeQuantity + 1))}
-              className="w-8 h-8 rounded bg-zinc-700 text-white hover:bg-zinc-600 flex items-center justify-center"
+              className="w-8 h-8 rounded bg-zinc-700 text-white hover:bg-zinc-600 flex items-center justify-center cursor-pointer"
             >
               <Plus className="w-4 h-4" />
             </button>
           </div>
           <button
             onClick={() => setRemoveQuantity(analysis.quantity)}
-            className="px-2 py-1.5 text-xs bg-zinc-700 text-zinc-300 rounded hover:bg-zinc-600"
+            className="px-2 py-1.5 text-xs bg-zinc-700 text-zinc-300 rounded hover:bg-zinc-600 cursor-pointer"
           >
             All ({analysis.quantity})
           </button>
           <div className="flex-1" />
           <button
             onClick={() => setShowRemoveControls(false)}
-            className="px-3 py-1.5 text-sm text-zinc-400 hover:text-white hover:bg-zinc-700 rounded-lg"
+            className="px-3 py-1.5 text-sm text-zinc-400 hover:text-white hover:bg-zinc-700 rounded-lg cursor-pointer"
           >
             Cancel
           </button>
           <button
             onClick={handleRemove}
-            className="px-3 py-1.5 text-sm bg-red-500 text-white rounded-lg hover:bg-red-600 flex items-center gap-1"
+            className="px-3 py-1.5 text-sm bg-red-500 text-white rounded-lg hover:bg-red-600 flex items-center gap-1 cursor-pointer"
           >
             <Trash2 className="w-3 h-3" />
             Remove {removeQuantity}

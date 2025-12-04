@@ -24,7 +24,6 @@ const CATEGORY_LABELS: Record<ItemCategory, string> = {
   gadget: 'Gadgets',
   nature: 'Nature',
   consumable: 'Consumables',
-  cosmetic: 'Cosmetics',
   quest_item: 'Quest Items',
 };
 
@@ -91,7 +90,7 @@ export function FilterBar({
           {searchQuery && (
             <button
               onClick={() => onSearchChange('')}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
@@ -131,7 +130,7 @@ export function FilterBar({
           {hasActiveFilters && (
             <button
               onClick={clearAllFilters}
-              className="px-3 py-2 text-sm text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-lg transition-colors flex items-center gap-1"
+              className="px-3 py-2 text-sm text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-lg transition-colors flex items-center gap-1 cursor-pointer"
             >
               <X className="w-4 h-4" />
               Clear
@@ -151,7 +150,7 @@ export function FilterBar({
               {CATEGORY_LABELS[cat]}
               <button
                 onClick={() => onCategoryChange?.(selectedCategories.filter(c => c !== cat))}
-                className="text-zinc-500 hover:text-white"
+                className="text-zinc-500 hover:text-white cursor-pointer"
               >
                 <X className="w-3 h-3" />
               </button>
@@ -168,7 +167,7 @@ export function FilterBar({
               {RARITY_CONFIG[rarity].label}
               <button
                 onClick={() => onRarityChange?.(selectedRarities.filter(r => r !== rarity))}
-                className="opacity-70 hover:opacity-100"
+                className="opacity-70 hover:opacity-100 cursor-pointer"
               >
                 <X className="w-3 h-3" />
               </button>
@@ -228,7 +227,7 @@ function MultiSelectDropdown<T extends string>({
       <button
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
-          'flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors border',
+          'flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors border cursor-pointer',
           selected.length > 0
             ? 'bg-amber-500/10 text-amber-400 border-amber-500/30'
             : 'text-zinc-400 hover:text-white hover:bg-zinc-800 border-zinc-700'
@@ -251,7 +250,7 @@ function MultiSelectDropdown<T extends string>({
               key={option.value}
               onClick={() => toggleOption(option.value)}
               className={cn(
-                'w-full flex items-center gap-2 px-3 py-2 text-sm text-left transition-colors',
+                'w-full flex items-center gap-2 px-3 py-2 text-sm text-left transition-colors cursor-pointer',
                 selected.includes(option.value)
                   ? 'bg-amber-500/10 text-amber-400'
                   : 'text-zinc-400 hover:text-white hover:bg-zinc-800'
