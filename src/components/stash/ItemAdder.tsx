@@ -31,7 +31,6 @@ const CATEGORY_LABELS: Record<ItemCategory, string> = {
   gadget: 'Gadgets',
   nature: 'Nature',
   consumable: 'Consumables',
-  cosmetic: 'Cosmetics',
   quest_item: 'Quest Items',
 };
 

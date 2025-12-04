@@ -31,7 +31,7 @@ interface ItemPickerProps {
   existingItems: StashItem[];
   onAddItems: (items: { itemId: string; quantity: number }[]) => void;
   onClose: () => void;
-  sidebarCollapsed?: boolean;
+  sidebarExpanded?: boolean;
 }
 
 interface SelectedItem {
@@ -58,7 +58,6 @@ const CATEGORY_LABELS: Record<ItemCategory, string> = {
   gadget: 'Gadgets',
   nature: 'Nature',
   consumable: 'Consumables',
-  cosmetic: 'Cosmetics',
   quest_item: 'Quest Items',
 };
 
@@ -73,7 +72,7 @@ const RARITY_CONFIG: Record<Rarity, { label: string; bgClass: string; textClass:
 
 const ALL_RARITIES: Rarity[] = ['common', 'uncommon', 'rare', 'epic', 'legendary'];
 
-export function ItemPicker({ existingItems, onAddItems, onClose, sidebarCollapsed = false }: ItemPickerProps) {
+export function ItemPicker({ existingItems, onAddItems, onClose, sidebarExpanded = false }: ItemPickerProps) {
   // State
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<ItemCategory | 'all'>('all');
@@ -514,8 +513,8 @@ export function ItemPicker({ existingItems, onAddItems, onClose, sidebarCollapse
       {/* Floating Selection Bar */}
       {selectedItems.length > 0 && (
         <div className={cn(
-          "fixed bottom-0 left-0 right-0 bg-zinc-900/95 backdrop-blur-sm border-t border-zinc-800 p-4 z-50",
-          sidebarCollapsed ? "lg:left-14" : "lg:left-56"
+          "fixed bottom-0 left-0 right-0 bg-zinc-900/95 backdrop-blur-sm border-t border-zinc-800 p-4 z-50 transition-all duration-200",
+          sidebarExpanded ? "lg:left-56" : "lg:left-14"
         )}>
           <div className="max-w-6xl mx-auto flex items-center justify-between gap-4">
             <div className="flex items-center gap-4 overflow-x-auto pb-1">
@@ -599,6 +598,17 @@ function ItemCardGrid({
 }: ItemCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [quantity, setQuantity] = useState(1);
+  const isBlueprint = item.category === 'blueprint';
+
+  // Blueprint background style with blue + white grid pattern
+  const blueprintStyle = isBlueprint ? {
+    background: `
+      linear-gradient(to right, rgba(255,255,255,0.15) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,0.15) 1px, transparent 1px),
+      linear-gradient(135deg, #1e3a5f 0%, #0f2847 50%, #1e3a5f 100%)
+    `,
+    backgroundSize: '10px 10px, 10px 10px, 100% 100%',
+  } : undefined;
 
   // Sync quantity with selection when it changes
   useEffect(() => {
@@ -671,17 +681,19 @@ function ItemCardGrid({
             : 'bg-zinc-900 border-zinc-800 hover:border-zinc-700 cursor-pointer'
         )}
       >
-        {/* Image - fixed small size */}
-        <div className={cn(
-          'w-full aspect-square rounded flex items-center justify-center overflow-hidden mb-1.5',
-          rarityConfig?.bgClass || 'bg-zinc-800'
-        )}>
+        {/* Image */}
+        <div
+          className={cn(
+            'w-full aspect-square rounded flex items-center justify-center overflow-hidden mb-1.5',
+            !isBlueprint && (rarityConfig?.bgClass || 'bg-zinc-800')
+          )}
+          style={blueprintStyle}
+        >
           {item.imageUrl ? (
             <img
               src={item.imageUrl}
               alt={item.name}
-              className="w-10 h-10 object-contain"
-              style={{ imageRendering: 'pixelated' }}
+              className="w-[75%] h-[75%] object-contain"
             />
           ) : (
             <Package className="w-5 h-5 text-zinc-500" />
@@ -813,6 +825,17 @@ function ItemCardList({
 }: ItemCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [quantity, setQuantity] = useState(1);
+  const isBlueprint = item.category === 'blueprint';
+
+  // Blueprint background style with blue + white grid pattern
+  const blueprintStyle = isBlueprint ? {
+    background: `
+      linear-gradient(to right, rgba(255,255,255,0.15) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,0.15) 1px, transparent 1px),
+      linear-gradient(135deg, #1e3a5f 0%, #0f2847 50%, #1e3a5f 100%)
+    `,
+    backgroundSize: '8px 8px, 8px 8px, 100% 100%',
+  } : undefined;
 
   // Sync quantity with selection when it changes
   useEffect(() => {
@@ -878,10 +901,13 @@ function ItemCardList({
           )}
 
           {/* Image - small fixed size */}
-          <div className={cn(
-            'w-10 h-10 rounded flex items-center justify-center overflow-hidden flex-shrink-0',
-            rarityConfig?.bgClass || 'bg-zinc-800'
-          )}>
+          <div
+            className={cn(
+              'w-10 h-10 rounded flex items-center justify-center overflow-hidden flex-shrink-0',
+              !isBlueprint && (rarityConfig?.bgClass || 'bg-zinc-800')
+            )}
+            style={blueprintStyle}
+          >
             {item.imageUrl ? (
               <img
                 src={item.imageUrl}

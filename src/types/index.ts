@@ -20,7 +20,6 @@ export type ItemCategory =
   | 'gadget'
   | 'nature'
   | 'consumable'
-  | 'cosmetic'
   | 'quest_item';
 
 // Recommendation action for stash analyzer

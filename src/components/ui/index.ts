@@ -4,3 +4,4 @@ export { Badge, type BadgeProps } from './Badge';
 export { Input, type InputProps } from './Input';
 export { FilterBar } from './FilterBar';
 export { Logo } from './Logo';
+export { ItemImage, getItemImageUrl, type ItemImageSize } from './ItemImage';
