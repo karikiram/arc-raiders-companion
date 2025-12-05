@@ -5,14 +5,14 @@ import {
   LayoutDashboard,
   Package,
   Shirt,
-  ScrollText,
-  Building2,
   SlidersHorizontal,
   HelpCircle,
   Hammer,
   Recycle,
   X,
   Database,
+  Trophy,
+  Tv,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Logo } from '@/components/ui';
@@ -28,12 +28,12 @@ interface SidebarProps {
 const navItems = [
   { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { id: 'items', label: 'Items Database', icon: Database },
+  { id: 'tier-lists', label: 'Tier Lists', icon: Trophy },
+  { id: 'twitch', label: 'Live Streams', icon: Tv },
   { id: 'stash', label: 'Raider Stash', icon: Package },
   { id: 'hoarding', label: 'Workshop Upgrades', icon: Hammer },
   { id: 'recyclables', label: 'Recycle & Sell', icon: Recycle },
   { id: 'loadouts', label: 'Loadouts', icon: Shirt },
-  { id: 'quests', label: 'Quest Tracker', icon: ScrollText },
-  { id: 'hideout', label: 'Hideout', icon: Building2 },
 ];
 
 const bottomItems = [

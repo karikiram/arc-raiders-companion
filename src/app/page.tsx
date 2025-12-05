@@ -10,6 +10,8 @@ import { HoardingGuide } from '@/components/hoarding';
 import { RecyclablesGuide } from '@/components/recyclables';
 import { ItemsDatabase } from '@/components/items-database';
 import { Dashboard } from '@/components/dashboard';
+import { TierListPage } from '@/components/tier-lists';
+import { TwitchStreamsView } from '@/components/twitch/TwitchStreamsView';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui';
 import { useAuth } from '@/context';
 import { DashboardAd } from '@/components/subscription';
@@ -325,6 +327,16 @@ export default function Home() {
           {/* Items Database Tab */}
           {activeTab === 'items' && (
             <ItemsDatabase />
+          )}
+
+          {/* Tier Lists Tab */}
+          {activeTab === 'tier-lists' && (
+            <TierListPage />
+          )}
+
+          {/* Twitch Streams Tab */}
+          {activeTab === 'twitch' && (
+            <TwitchStreamsView />
           )}
 
           {/* Hoarding Guide Tab */}

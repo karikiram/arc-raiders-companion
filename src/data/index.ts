@@ -31,3 +31,12 @@ export {
   canCreateLoadout,
   getRemainingFreeSlots,
 } from './loadouts';
+export {
+  PVE_WEAPONS_TIER_LIST,
+  PVP_WEAPONS_TIER_LIST,
+  ATTACHMENTS_TIER_LIST,
+  TIER_LISTS,
+  TIER_COLORS,
+  WEAPON_TYPE_LABELS,
+  WEAPON_TYPE_ICONS,
+} from './tier-lists';

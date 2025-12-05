@@ -11,10 +11,6 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-// Debug: log which API key is being used
-console.log('Firebase API Key being used:', firebaseConfig.apiKey);
-console.log('Firebase Project ID:', firebaseConfig.projectId);
-
 // Check if Firebase is configured
 const isConfigured = firebaseConfig.apiKey && firebaseConfig.projectId;
 

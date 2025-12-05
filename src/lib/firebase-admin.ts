@@ -14,12 +14,10 @@ function getFirebaseAdmin() {
     const serviceAccountKey = process.env.FIREBASE_SERVICE_ACCOUNT_KEY;
 
     if (!serviceAccountKey) {
-      console.error('FIREBASE_SERVICE_ACCOUNT_KEY environment variable not set');
       throw new Error('Firebase Admin SDK not configured: missing service account key');
     }
 
     const serviceAccount = JSON.parse(serviceAccountKey);
-    console.log('Initializing Firebase Admin with project:', serviceAccount.project_id);
 
     app = initializeApp({
       credential: cert(serviceAccount),
