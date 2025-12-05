@@ -3,18 +3,16 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import {
-  Recycle,
-  Hammer,
-  Trophy,
-  ArrowRight,
   ExternalLink,
   Newspaper,
   Loader2,
 } from 'lucide-react';
 import { TwitchStreams } from '@/components/twitch/TwitchStreams';
+import { FeatureCarousel } from './FeatureCarousel';
+import type { TabId } from '@/hooks/useTabNavigation';
 
 interface DashboardProps {
-  onNavigate: (tab: string) => void;
+  onNavigate: (tab: TabId) => void;
 }
 
 interface NewsArticle {
@@ -130,7 +128,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
   return (
     <div className="space-y-8">
       {/* Hero Section with Background Image */}
-      <div className="relative -mx-6 -mt-6 lg:-mx-8 lg:-mt-8 overflow-hidden">
+      <div className="relative -mx-6 -mt-6 lg:-mx-8 lg:-mt-8 overflow-hidden scale-in">
         {/* Background Image */}
         <div
           className="absolute inset-0 bg-cover bg-no-repeat"
@@ -156,91 +154,16 @@ export function Dashboard({ onNavigate }: DashboardProps) {
         </div>
       </div>
 
-      {/* Main Feature Cards - 3 Cards */}
-      <div className="grid md:grid-cols-3 gap-6 -mt-16 relative z-10">
-        {/* Tier Lists Card */}
-        <button
-          onClick={() => onNavigate('tier-lists')}
-          className="group relative p-6 bg-gradient-to-br from-rose-900/40 via-zinc-900 to-zinc-900 border border-rose-700/30 rounded-2xl text-left hover:border-rose-500/60 transition-all cursor-pointer hover:scale-[1.02] hover:shadow-xl hover:shadow-rose-500/10"
-        >
-          <div className="absolute top-4 right-4 opacity-10 group-hover:opacity-20 transition-opacity">
-            <Trophy className="w-20 h-20 text-rose-400" />
-          </div>
-          <div className="relative">
-            <div className="w-14 h-14 bg-rose-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-              <Trophy className="w-7 h-7 text-rose-400" />
-            </div>
-            <div className="inline-block px-2 py-0.5 bg-rose-500/20 text-rose-400 text-xs font-bold rounded mb-3 uppercase tracking-wider">
-              Hot
-            </div>
-            <h3 className="text-xl font-bold text-white mb-2">Weapon Tier Lists</h3>
-            <p className="text-zinc-400 mb-4 text-sm">
-              PvP & PvE weapon rankings. Know which guns dominate the meta and which to avoid.
-            </p>
-            <span className="inline-flex items-center gap-1 text-rose-400 font-semibold group-hover:gap-2 transition-all">
-              View Rankings <ArrowRight className="w-4 h-4" />
-            </span>
-          </div>
-        </button>
-
-        {/* Recycle & Sell Card */}
-        <button
-          onClick={() => onNavigate('recyclables')}
-          className="group relative p-6 bg-gradient-to-br from-emerald-900/40 via-zinc-900 to-zinc-900 border border-emerald-700/30 rounded-2xl text-left hover:border-emerald-500/60 transition-all cursor-pointer hover:scale-[1.02] hover:shadow-xl hover:shadow-emerald-500/10"
-        >
-          <div className="absolute top-4 right-4 opacity-10 group-hover:opacity-20 transition-opacity">
-            <Recycle className="w-20 h-20 text-emerald-400" />
-          </div>
-          <div className="relative">
-            <div className="w-14 h-14 bg-emerald-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-              <Recycle className="w-7 h-7 text-emerald-400" />
-            </div>
-            <div className="inline-block px-2 py-0.5 bg-emerald-500/20 text-emerald-400 text-xs font-bold rounded mb-3 uppercase tracking-wider">
-              Essential
-            </div>
-            <h3 className="text-xl font-bold text-white mb-2">Recycle & Sell Guide</h3>
-            <p className="text-zinc-400 mb-4 text-sm">
-              Maximize your earnings. Know exactly what to recycle for materials vs sell for credits.
-            </p>
-            <span className="inline-flex items-center gap-1 text-emerald-400 font-semibold group-hover:gap-2 transition-all">
-              View Guide <ArrowRight className="w-4 h-4" />
-            </span>
-          </div>
-        </button>
-
-        {/* Workshop Upgrades Card */}
-        <button
-          onClick={() => onNavigate('hoarding')}
-          className="group relative p-6 bg-gradient-to-br from-amber-900/40 via-zinc-900 to-zinc-900 border border-amber-700/30 rounded-2xl text-left hover:border-amber-500/60 transition-all cursor-pointer hover:scale-[1.02] hover:shadow-xl hover:shadow-amber-500/10"
-        >
-          <div className="absolute top-4 right-4 opacity-10 group-hover:opacity-20 transition-opacity">
-            <Hammer className="w-20 h-20 text-amber-400" />
-          </div>
-          <div className="relative">
-            <div className="w-14 h-14 bg-amber-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-              <Hammer className="w-7 h-7 text-amber-400" />
-            </div>
-            <div className="inline-block px-2 py-0.5 bg-amber-500/20 text-amber-400 text-xs font-bold rounded mb-3 uppercase tracking-wider">
-              Plan Ahead
-            </div>
-            <h3 className="text-xl font-bold text-white mb-2">Workshop Upgrades</h3>
-            <p className="text-zinc-400 mb-4 text-sm">
-              Track materials needed for upgrades. Never accidentally sell critical crafting items.
-            </p>
-            <span className="inline-flex items-center gap-1 text-amber-400 font-semibold group-hover:gap-2 transition-all">
-              View Guide <ArrowRight className="w-4 h-4" />
-            </span>
-          </div>
-        </button>
-      </div>
+      {/* Feature Carousel */}
+      <FeatureCarousel onNavigate={onNavigate} />
 
       {/* Twitch Streams Section */}
-      <div className="pt-4">
+      <div className="pt-4 slide-up delay-300">
         <TwitchStreams limit={3} showHeader={true} compact={true} />
       </div>
 
       {/* Latest News Section */}
-      <div className="pt-4">
+      <div className="pt-4 slide-up delay-400">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-accent/20 rounded-lg flex items-center justify-center">

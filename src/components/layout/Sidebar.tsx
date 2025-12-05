@@ -16,10 +16,11 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Logo } from '@/components/ui';
+import type { TabId } from '@/hooks/useTabNavigation';
 
 interface SidebarProps {
   activeTab?: string;
-  onTabChange?: (tab: string) => void;
+  onTabChange?: (tab: TabId) => void;
   isOpen?: boolean;
   onClose?: () => void;
   onHoverChange?: (isHovered: boolean) => void;
@@ -55,7 +56,7 @@ export function Sidebar({ activeTab = 'dashboard', onTabChange, isOpen = false, 
   };
 
   const handleTabClick = (tabId: string) => {
-    onTabChange?.(tabId);
+    onTabChange?.(tabId as TabId);
     // On mobile, close sidebar after selection
     if (window.innerWidth < 1024) {
       onClose?.();

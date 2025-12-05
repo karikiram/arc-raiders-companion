@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, Suspense } from 'react';
 import { Package } from 'lucide-react';
 import { Header } from '@/components/layout/Header';
 import { Sidebar } from '@/components/layout/Sidebar';
@@ -17,6 +17,9 @@ import { useAuth } from '@/context';
 import { DashboardAd } from '@/components/subscription';
 import { ThemeSelector } from '@/components/settings';
 import { DEFAULT_LOADOUTS } from '@/data';
+import { useTabNavigation } from '@/hooks/useTabNavigation';
+import { getTabTitle } from '@/lib/metadata';
+import { ViewTransition } from '@/components/common/ViewTransition';
 import type { StashItem, Loadout } from '@/types';
 
 // Demo stash item IDs and quantities (dates added on client side to avoid hydration mismatch)
@@ -64,9 +67,9 @@ const createDemoStash = (): StashItem[] =>
 const DEMO_ACTIVE_QUESTS: string[] = [];
 const DEMO_COMPLETED_QUESTS: string[] = [];
 
-export default function Home() {
+function HomeContent() {
   const { user, userProfile, loading, signInWithGoogle, signOut, updateUserProfile, isNewAccount } = useAuth();
-  const [activeTab, setActiveTab] = useState('dashboard');
+  const { activeTab, setTab } = useTabNavigation();
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [sidebarHovered, setSidebarHovered] = useState(false);
   const [showItemPicker, setShowItemPicker] = useState(false);
@@ -163,6 +166,11 @@ export default function Home() {
       }
     }
   }, [isNewAccount, user, stashInitialized, loadoutsInitialized, dataTransferred, localStash, localLoadouts, updateUserProfile]);
+
+  // Update document title when tab changes
+  useEffect(() => {
+    document.title = getTabTitle(activeTab);
+  }, [activeTab]);
 
   // Use profile data if signed in, otherwise demo data
   const stash = userProfile?.stash || localStash;
@@ -263,7 +271,7 @@ export default function Home() {
       <div className="flex">
         <Sidebar
           activeTab={activeTab}
-          onTabChange={setActiveTab}
+          onTabChange={setTab}
           isOpen={mobileSidebarOpen}
           onClose={() => setMobileSidebarOpen(false)}
           onHoverChange={setSidebarHovered}
@@ -271,19 +279,20 @@ export default function Home() {
 
         {/* Main content with left margin to account for fixed sidebar */}
         <main className={`flex-1 p-6 lg:p-8 transition-all duration-200 ${sidebarHovered ? 'lg:ml-56' : 'lg:ml-14'}`}>
-          {/* Dashboard Tab */}
-          {activeTab === 'dashboard' && (
-            <>
-              <Dashboard onNavigate={setActiveTab} />
-              {/* Dashboard Ad for free users */}
-              <div className="mt-8">
-                <DashboardAd />
-              </div>
-            </>
-          )}
+          <ViewTransition transitionKey={activeTab}>
+            {/* Dashboard Tab */}
+            {activeTab === 'dashboard' && (
+              <>
+                <Dashboard onNavigate={setTab} />
+                {/* Dashboard Ad for free users */}
+                <div className="mt-8">
+                  <DashboardAd />
+                </div>
+              </>
+            )}
 
-          {/* Stash Tab */}
-          {activeTab === 'stash' && (
+            {/* Stash Tab */}
+            {activeTab === 'stash' && (
             showItemPicker ? (
               <ItemPicker
                 existingItems={stash}
@@ -358,22 +367,6 @@ export default function Home() {
             />
           )}
 
-          {/* Quests Tab - Coming Soon */}
-          {activeTab === 'quests' && (
-            <ComingSoon
-              title="Quest Tracker"
-              description="Track quest requirements, see what items you need, and plan your raids."
-            />
-          )}
-
-          {/* Hideout Tab - Coming Soon */}
-          {activeTab === 'hideout' && (
-            <ComingSoon
-              title="Hideout Planner"
-              description="Plan your hideout upgrades and see material requirements."
-            />
-          )}
-
           {/* Settings Tab */}
           {activeTab === 'settings' && (
             <div className="space-y-6">
@@ -392,31 +385,26 @@ export default function Home() {
             </div>
           )}
 
-          {/* Help Tab */}
-          {activeTab === 'help' && (
-            <HelpPanel />
-          )}
+            {/* Help Tab */}
+            {activeTab === 'help' && (
+              <HelpPanel />
+            )}
+          </ViewTransition>
         </main>
       </div>
     </div>
   );
 }
 
-interface ComingSoonProps {
-  title: string;
-  description: string;
-}
-
-function ComingSoon({ title, description }: ComingSoonProps) {
+export default function Home() {
   return (
-    <div className="flex flex-col items-center justify-center py-20 text-center">
-      <div className="w-16 h-16 bg-zinc-800 rounded-full flex items-center justify-center mb-4">
-        <span className="text-3xl">🚧</span>
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-zinc-950">
+        <div className="animate-pulse text-zinc-500">Loading...</div>
       </div>
-      <h2 className="text-xl font-bold text-white">{title}</h2>
-      <p className="text-zinc-400 mt-2 max-w-md">{description}</p>
-      <p className="text-accent mt-4 text-sm font-medium">Coming Soon</p>
-    </div>
+    }>
+      <HomeContent />
+    </Suspense>
   );
 }
 
