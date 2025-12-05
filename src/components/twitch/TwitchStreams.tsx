@@ -68,7 +68,15 @@ export function TwitchStreams({ limit = 8, showHeader = true, compact = false }:
   };
 
   // Prevent hydration errors by not rendering until mounted
-  if (!mounted || loading) {
+  if (!mounted) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <div className="w-8 h-8" />
+      </div>
+    );
+  }
+
+  if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
         <Loader2 className="w-8 h-8 text-accent animate-spin" />

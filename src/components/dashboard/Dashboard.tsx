@@ -28,25 +28,25 @@ interface NewsArticle {
 const LATEST_NEWS: NewsArticle[] = [
   {
     title: 'The Evolution of ARC Raiders EP3: Building ARC Machines',
-    date: 'December 4, 2024',
+    date: 'December 4, 2025',
     url: 'https://arcraiders.com/news/evolution-of-arc-raiders-episode-3',
     imageUrl: 'https://storage.googleapis.com/web-arc-raiders-cms-assets/article-cards/4744f8eb-766c-evolution-of-arc-raiders-episode-3-card-300x200-300x200.png',
   },
   {
     title: 'The Evolution of ARC Raiders EP2: The Life of a Raider',
-    date: 'November 27, 2024',
+    date: 'November 27, 2025',
     url: 'https://arcraiders.com/news/evolution-of-arc-raiders-episode-2',
     imageUrl: 'https://storage.googleapis.com/web-arc-raiders-cms-assets/article-cards/841e3a73-8b77-evolution-of-arc-raiders-episode-2-card-300x200-300x200.png',
   },
   {
     title: 'Patch Notes - Update 1.4.0',
-    date: 'November 27, 2024',
+    date: 'November 27, 2025',
     url: 'https://arcraiders.com/news/patch-notes-1-4-0',
     imageUrl: 'https://storage.googleapis.com/web-arc-raiders-cms-assets/article-cards/9e3c79ed-5383-patch-notes-1-4-0-card-300x200-300x200.png',
   },
   {
     title: 'A Scrappy Origin Story',
-    date: 'November 26, 2024',
+    date: 'November 26, 2025',
     url: 'https://arcraiders.com/news/the-story-of-scrappy-the-rooster',
     imageUrl: 'https://storage.googleapis.com/web-arc-raiders-cms-assets/article-cards/f420ae0c-62c2-the-story-of-scrappy-the-rooster-card-300x200-300x200.png',
   },
@@ -54,6 +54,36 @@ const LATEST_NEWS: NewsArticle[] = [
 
 function NewsCard({ article }: { article: NewsArticle }) {
   const [imageError, setImageError] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return (
+      <a
+        href={article.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="group flex flex-col bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden hover:border-zinc-700 transition-all hover:scale-[1.02]"
+      >
+        <div className="relative h-32 sm:h-36 bg-zinc-800 overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-t from-zinc-900/80 to-transparent" />
+        </div>
+        <div className="p-4 flex-1 flex flex-col">
+          <p className="text-xs text-zinc-500 mb-1">{article.date}</p>
+          <h4 className="text-sm font-semibold text-white line-clamp-2 group-hover:text-accent transition-colors flex-1">
+            {article.title}
+          </h4>
+          <div className="flex items-center gap-1 text-xs text-zinc-500 mt-2 group-hover:text-accent transition-colors">
+            <span>Read more</span>
+            <ExternalLink className="w-3 h-3" />
+          </div>
+        </div>
+      </a>
+    );
+  }
 
   return (
     <a

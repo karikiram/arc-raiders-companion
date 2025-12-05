@@ -1,5 +1,18 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+
 export function JsonLd() {
+  const [mounted, setMounted] = useState(false);
   const baseUrl = 'https://arc-companion.com';
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
 
   // WebApplication Schema - Primary structured data
   const webAppSchema = {
